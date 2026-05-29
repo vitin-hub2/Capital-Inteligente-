@@ -1,6 +1,47 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { X, Calendar, Clock, Share2, Award, Copy, Check, MessageCircle, Star, Sparkles } from "lucide-react";
 import { Article } from "../types";
+
+interface AdsterraAdWidgetProps {
+  articleId: string;
+}
+
+function AdsterraAdWidget({ articleId }: AdsterraAdWidgetProps) {
+  useEffect(() => {
+    // Wait a brief tick to let the DOM container fully render
+    const timer = setTimeout(() => {
+      const container = document.getElementById("container-fd53582b6d678625d06203f46687552f");
+      if (!container) return;
+
+      // Only load if the script is not already currently running in this render frame
+      const script = document.createElement("script");
+      script.async = true;
+      script.setAttribute("data-cfasync", "false");
+      script.src = "https://pl29577669.effectivecpmnetwork.com/fd53582b6d678625d06203f46687552f/invoke.js";
+      script.className = "adsterra-dynamic-article-script";
+      
+      document.body.appendChild(script);
+    }, 150);
+
+    return () => {
+      clearTimeout(timer);
+      const scripts = document.querySelectorAll(".adsterra-dynamic-article-script");
+      scripts.forEach(s => s.remove());
+    };
+  }, [articleId]);
+
+  return (
+    <div className="my-6 p-4 bg-slate-50 rounded-xl border border-dashed border-slate-200 flex flex-col items-center">
+      <span className="text-[10px] uppercase font-mono tracking-wider text-slate-400 mb-2.5 font-semibold">
+        Publicidade / Patrocinado
+      </span>
+      <div 
+        id="container-fd53582b6d678625d06203f46687552f" 
+        className="w-full min-h-[90px] flex justify-center items-center overflow-hidden"
+      />
+    </div>
+  );
+}
 
 interface ArticleModalProps {
   article: Article | null;
@@ -145,14 +186,19 @@ export default function ArticleModal({ article, isOpen, onClose }: ArticleModalP
             {/* Full paragraphs map */}
             <div className="space-y-4 max-w-none text-left">
               {article.content.map((paragraph, index) => (
-                <p
-                  key={index}
-                  className={`font-sans text-sm sm:text-base text-slate-700 leading-relaxed font-light ${
-                    index === 0 ? "first-letter:text-4xl first-letter:font-serif first-letter:font-bold first-letter:text-brand-navy first-letter:float-left first-letter:mr-2 أول" : ""
-                  }`}
-                >
-                  {paragraph}
-                </p>
+                <React.Fragment key={index}>
+                  <p
+                    className={`font-sans text-sm sm:text-base text-slate-700 leading-relaxed font-light ${
+                      index === 0 ? "first-letter:text-4xl first-letter:font-serif first-letter:font-bold first-letter:text-brand-navy first-letter:float-left first-letter:mr-2 أول" : ""
+                    }`}
+                  >
+                    {paragraph}
+                  </p>
+                  {/* Insert Ad neatly after the second paragraph */}
+                  {index === 1 && (
+                    <AdsterraAdWidget articleId={article.id} />
+                  )}
+                </React.Fragment>
               ))}
             </div>
 
