@@ -1,0 +1,6 @@
+{
+  "name": "Capital Inteligente",
+  "description": "Portal independente de notícias, análises de mercado, educação financeira e estratégias de investimento para construir riqueza de forma inteligente.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
